@@ -1,32 +1,38 @@
 import sys
-sys.setrecursionlimit(10**6)
-def dfs(y, x):
-    if y <= -1 or y >= h or x <= -1 or x >= w or grid[y][x] != 1:
-        return
-    grid[y][x] = 0
-    for i in range(8):
-        dfs(y + dy[i], x + dx[i])
+from collections import deque
 
-dy = [-1, 1, 0, 0, -1, -1, 1, 1]
-dx = [0, 0, -1, 1, -1, 1, -1, 1]
+directy = [0, 0, 1, -1, -1, -1, 1, 1]
+directx = [1, -1, 0, 0, -1, 1, -1, 1]
 
-while True:
-    w, h = map(int, input().split())
+def bfs(y, x) :
+    q=deque()
+    q.append((y, x))
 
-    if w == 0 and h == 0:
-        break
+    while q:
+        sy, sx = q.popleft()
+        # arr[sy][sx] = 0
+        for i in range(8):
+            dy = directy[i]+sy
+            dx = directx[i]+sx
 
-    grid = []
+            if dy<0 or dx<0 or dy>=col or dx>=row : continue
+            if arr[dy][dx] == 0 : continue
+            arr[dy][dx] = 0
+            q.append((dy, dx))
 
-    for _ in range(h):
-        grid.append(list(map(int, input().split())))
+while 1:
+    row, col = map(int, sys.stdin.readline().split())
+    if row == 0 and col == 0 : break
 
-    count = 0
+    arr = []
+    cnt = 0
 
-    for y in range(h):
-        for x in range(w):
-            if grid[y][x] == 1:
-                dfs(y, x)
-                count += 1
+    for _ in range(col):
+        arr.append(list(map(int, sys.stdin.readline().split())))
 
-    print(count)
+    for i in range(col):
+        for j in range(row):
+            if arr[i][j] == 1:
+                cnt+= 1
+                bfs(i, j)
+    print(cnt)
