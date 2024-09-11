@@ -1,25 +1,18 @@
 n,k=map(int,input().split())
-coin=[0]
+coin=[]
 for i in range(n):
     value=int(input())
     coin.append(value)
-arr=[[10001]*(k+1) for _ in range(n+1)]
-arr[0][0]=0
 
 coin.sort()
+arr=[10001]*(k+1)
+arr[0]=0
+for i in range(n):
+    start=coin[i]
+    for j in range(start,k+1):
+        arr[j]=min(arr[j],arr[j-start]+1)
 
-for i in range(1,n+1):
-    for j in range(k+1):
-        mok=j//coin[i]
-        if j%coin[i]==0:
-            arr[i][j]=mok
-        else:
-            if mok==0:
-                arr[i][j]=arr[i-1][j]
-            else:
-                arr[i][j]=min(arr[i-1][j],arr[i][j-coin[i]]+1)
-
-if arr[n][k]>=10001:
+if arr[k]>=10001:
     print(-1)
 else:
-    print(arr[n][k])
+    print(arr[k])
